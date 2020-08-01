@@ -7,6 +7,10 @@ import "C"
 type Peer interface {
 	GetAddress() Address
 
+	Disconnect(data uint32)
+	DisconnectNow(data uint32)
+	DisconnectLater(data uint32)
+
 	SendBytes(data []byte, channel uint8, flags PacketFlags) error
 	SendString(str string, channel uint8, flags PacketFlags) error
 	SendPacket(packet Packet, channel uint8) error
@@ -20,6 +24,27 @@ func (peer enetPeer) GetAddress() Address {
 	return &enetAddress{
 		cAddr: peer.cPeer.address,
 	}
+}
+
+func (peer enetPeer) Disconnect(data uint32) {
+	C.enet_peer_disconnect(
+		peer.cPeer,
+		(C.enet_uint32)(data),
+	)
+}
+
+func (peer enetPeer) DisconnectNow(data uint32) {
+	C.enet_peer_disconnect_now(
+		peer.cPeer,
+		(C.enet_uint32)(data),
+	)
+}
+
+func (peer enetPeer) DisconnectLater(data uint32) {
+	C.enet_peer_disconnect_later(
+		peer.cPeer,
+		(C.enet_uint32)(data),
+	)
 }
 
 func (peer enetPeer) SendBytes(data []byte, channel uint8, flags PacketFlags) error {
