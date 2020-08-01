@@ -34,7 +34,7 @@ type Event interface {
 	GetPeer() Peer
 	GetChannelID() uint8
 	GetData() uint32
-	//GetPacket() Packet
+	GetPacket() Packet
 }
 
 type enetEvent struct {
@@ -57,4 +57,10 @@ func (event *enetEvent) GetChannelID() uint8 {
 
 func (event *enetEvent) GetData() uint32 {
 	return (uint32)(event.cEvent.data)
+}
+
+func (event *enetEvent) GetPacket() Packet {
+	return enetPacket{
+		cPacket: event.cEvent.packet,
+	}
 }
