@@ -1,11 +1,14 @@
 # go-enet
 Enet bindings for Go using cgo.
 
-* **Windows**: Should work out of the box with the supplied headers and library.
-* **Linux**: Install the enet development package with your package manager. For example, `apt install libenet-dev`.
-* **MacOS**: Install the enet package with brew. For example, `brew install enet`.
-
 ## Installation
+First, you might need to install enet as a dependency:
+
+* **Windows**: Nothing to do - should work out of the box with the supplied headers and library.
+* **Linux**: Install the enet development package with your package manager.
+	* On Debian-based systems: `apt install libenet-dev`
+* **MacOS**: Install the enet package with brew: `brew install enet`
+
 ```
 $ go get github.com/codecat/go-enet
 ```
