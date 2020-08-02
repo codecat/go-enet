@@ -10,6 +10,8 @@ import (
 type Host interface {
 	Destroy()
 	Service(timeout uint32) Event
+
+	Connect(addr Address, channelCount int, data uint32) (Peer, error)
 }
 
 type enetHost struct {
@@ -30,10 +32,32 @@ func (host *enetHost) Service(timeout uint32) Event {
 	return ret
 }
 
+func (host *enetHost) Connect(addr Address, channelCount int, data uint32) (Peer, error) {
+	peer := C.enet_host_connect(
+		host.cHost,
+		&(addr.(*enetAddress)).cAddr,
+		(C.size_t)(channelCount),
+		(C.enet_uint32)(data),
+	)
+
+	if peer == nil {
+		return nil, errors.New("couldn't connect to foreign peer")
+	}
+
+	return enetPeer{
+		cPeer: peer,
+	}, nil
+}
+
 // NewHost creats a host for communicating to peers
 func NewHost(addr Address, peerCount, channelLimit uint64, incomingBandwidth, outgoingBandwidth uint32) (Host, error) {
+	var cAddr *C.struct__ENetAddress
+	if addr != nil {
+		cAddr = &(addr.(*enetAddress)).cAddr
+	}
+
 	host := C.enet_host_create(
-		&(addr.(*enetAddress)).cAddr,
+		cAddr,
 		(C.size_t)(peerCount),
 		(C.size_t)(channelLimit),
 		(C.enet_uint32)(incomingBandwidth),
