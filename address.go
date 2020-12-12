@@ -14,6 +14,7 @@ type Address interface {
 	SetPort(port uint16)
 
 	String() string
+	GetPort() uint16
 }
 
 type enetAddress struct {
@@ -47,6 +48,10 @@ func (addr *enetAddress) String() string {
 	ret := C.GoString((*C.char)(buffer))
 	C.free(buffer)
 	return ret
+}
+
+func (addr *enetAddress) GetPort() uint16 {
+	return uint16(addr.cAddr.port)
 }
 
 // NewAddress creates a new address
