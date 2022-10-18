@@ -12,6 +12,8 @@ type Host interface {
 	Service(timeout uint32) Event
 
 	Connect(addr Address, channelCount int, data uint32) (Peer, error)
+
+	CompressWithRangeCoder() error
 }
 
 type enetHost struct {
