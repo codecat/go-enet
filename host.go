@@ -54,8 +54,10 @@ func (host *enetHost) Connect(addr Address, channelCount int, data uint32) (Peer
 func (host *enetHost) CompressWithRangeCoder() error {
 	status := C.enet_host_compress_with_range_coder(host.cHost)
 
-	if status != 0 {
+	if status == -1 {
 		return errors.New("couldn't set the packet compressor to default range coder because context is nil")
+	} else if status != 0 {
+		return errors.New("couldn't set the packet compressor to default range coder for unknown reason")
 	}
 
 	return nil
