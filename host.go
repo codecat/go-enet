@@ -14,6 +14,9 @@ type Host interface {
 	Connect(addr Address, channelCount int, data uint32) (Peer, error)
 
 	CompressWithRangeCoder() error
+	BroadcastBytes(data []byte, channel uint8, flags PacketFlags) error
+	BroadcastPacket(packet Packet, channel uint8) error
+	BroadcastString(str string, channel uint8, flags PacketFlags) error
 }
 
 type enetHost struct {
@@ -85,4 +88,29 @@ func NewHost(addr Address, peerCount, channelLimit uint64, incomingBandwidth, ou
 	return &enetHost{
 		cHost: host,
 	}, nil
+}
+
+func (host *enetHost) BroadcastBytes(data []byte, channel uint8, flags PacketFlags) error {
+	packet, err := NewPacket(data, flags)
+	if err != nil {
+		return err
+	}
+	return host.BroadcastPacket(packet, channel)
+}
+
+func (host *enetHost) BroadcastPacket(packet Packet, channel uint8) error {
+	C.enet_host_broadcast(
+		host.cHost,
+		(C.enet_uint8)(channel),
+		packet.(enetPacket).cPacket,
+	)
+	return nil
+}
+
+func (host *enetHost) BroadcastString(str string, channel uint8, flags PacketFlags) error {
+	packet, err := NewPacket([]byte(str), flags)
+	if err != nil {
+		return err
+	}
+	return host.BroadcastPacket(packet, channel)
 }
