@@ -17,18 +17,18 @@ const (
 
 	// PacketFlagUnsequenced packets will not be sequenced with other packets not supported
 	// for reliable packets
-	PacketFlagUnsequenced = C.ENET_PACKET_FLAG_UNSEQUENCED
+	PacketFlagUnsequenced PacketFlags = C.ENET_PACKET_FLAG_UNSEQUENCED
 
 	// PacketFlagNoAllocate packets will not allocate data, and user must supply it instead
-	PacketFlagNoAllocate = C.ENET_PACKET_FLAG_NO_ALLOCATE
+	PacketFlagNoAllocate PacketFlags = C.ENET_PACKET_FLAG_NO_ALLOCATE
 
 	// PacketFlagUnreliableFragment packets will be fragmented using unreliable (instead of
 	// reliable) sends if it exceeds the MTU
-	PacketFlagUnreliableFragment = C.ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT
+	PacketFlagUnreliableFragment PacketFlags = C.ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT
 
 	// PacketFlagSent specifies whether the packet has been sent from all queues it has been
 	// entered into
-	PacketFlagSent = C.ENET_PACKET_FLAG_SENT
+	PacketFlagSent PacketFlags = C.ENET_PACKET_FLAG_SENT
 )
 
 // Packet may be sent to or received from a peer
