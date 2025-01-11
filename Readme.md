@@ -9,6 +9,10 @@ First, you might need to install enet as a dependency:
 	* On Debian-based systems: `apt install libenet-dev`
 * **MacOS**: Install the enet package with brew: `brew install enet`
 
+Since this module uses cgo, you must also make sure you have a C compiler in your `PATH`. For Linux and Mac, this is usually pretty straight forward. On Windows, you may have to use something like [MSYS2](https://www.msys2.org/).
+
+When ready, get the module like this:
+
 ```
 $ go get github.com/codecat/go-enet
 ```
