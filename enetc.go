@@ -2,7 +2,7 @@ package enet
 
 // #cgo !windows pkg-config: libenet
 // #cgo windows CFLAGS: -Ienet/include/
-// #cgo windows LDFLAGS: -Lenet/ -lenet -lWs2_32 -lWinmm
+// #cgo windows LDFLAGS: -Lenet/ -lenet -lws2_32 -lwinmm
 // #include <enet/enet.h>
 import "C"
 import "fmt"
