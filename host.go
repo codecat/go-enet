@@ -1,6 +1,11 @@
 package enet
 
-// #include <enet/enet.h>
+/*
+#include <enet/enet.h>
+void set_host_checksum(ENetHost *host) {
+    host->checksum = enet_crc32;
+}
+*/
 import "C"
 import (
 	"errors"
@@ -9,6 +14,7 @@ import (
 // Host for communicating with peers
 type Host interface {
 	Destroy()
+	EnableCRC32Checksum()
 	Service(timeout uint32) Event
 
 	Connect(addr Address, channelCount int, data uint32) (Peer, error)
@@ -21,6 +27,10 @@ type Host interface {
 
 type enetHost struct {
 	cHost *C.struct__ENetHost
+}
+
+func (host *enetHost) EnableCRC32Checksum() {
+    C.set_host_checksum(host.cHost)
 }
 
 func (host *enetHost) Destroy() {
