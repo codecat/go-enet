@@ -35,6 +35,7 @@ const (
 type Packet interface {
 	Destroy()
 	GetData() []byte
+	GetDataUnsafe() []byte
 	GetFlags() PacketFlags
 }
 
@@ -50,6 +51,21 @@ func (packet enetPacket) GetData() []byte {
 	return C.GoBytes(
 		unsafe.Pointer(packet.cPacket.data),
 		(C.int)(packet.cPacket.dataLength),
+	)
+}
+
+// GetDataUnsafe returns a zero-copy, zero-allocation Go slice that points directly
+// to the underlying C memory of the ENet packet. This avoids the expensive memory
+// copy operation between C and Go memory spaces and thus minimizes Garbage Collector
+// (GC) pressure.
+//
+// WARNING: The returned slice is only valid as long as the ENet packet is alive.
+// Do NOT pass this slice to async Goroutines or hold references to it after
+// the packet is destroyed.
+func (packet enetPacket) GetDataUnsafe() []byte {
+	return unsafe.Slice(
+		(*byte)(unsafe.Pointer(packet.cPacket.data)),
+		packet.cPacket.dataLength,
 	)
 }
 
